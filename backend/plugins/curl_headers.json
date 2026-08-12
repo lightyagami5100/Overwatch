@@ -1,0 +1,12 @@
+{
+  "name": "curl_headers",
+  "display_name": "HTTP Headers",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN", "IP"],
+  "command": "curl -sI -m 5 -L http://{target} 2>/dev/null | head -30",
+  "timeout": 10,
+  "description": "Fetch HTTP response headers — server, security headers, redirects",
+  "runner": "native"
+}

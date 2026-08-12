@@ -1,0 +1,12 @@
+{
+  "name": "dns_nslookup",
+  "display_name": "NSLookup",
+  "category": "DNS",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN"],
+  "command": "nslookup {target}",
+  "timeout": 10,
+  "description": "Resolve DNS A/AAAA records for a domain",
+  "runner": "native"
+}

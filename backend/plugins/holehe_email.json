@@ -1,0 +1,12 @@
+{
+  "name": "holehe_email",
+  "display_name": "Holehe (Email Footprint)",
+  "category": "Social OSINT",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["EMAIL"],
+  "command": "holehe {target} --only-used --no-color --no-clear",
+  "timeout": 30,
+  "description": "Silently check if an email is registered on over 120 services (using password recovery logic without sending emails).",
+  "runner": "native"
+}

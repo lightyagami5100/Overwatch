@@ -1,0 +1,12 @@
+{
+  "name": "wafw00f_detect",
+  "display_name": "WAFw00f",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN"],
+  "command": "wafw00f -a {target} 2>/dev/null | tail -n +4",
+  "timeout": 15,
+  "description": "Detect Web Application Firewalls protecting a target",
+  "runner": "native"
+}

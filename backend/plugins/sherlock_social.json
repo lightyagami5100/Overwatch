@@ -1,0 +1,12 @@
+{
+  "name": "sherlock_social",
+  "display_name": "Sherlock",
+  "category": "Social OSINT",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["PERSON", "ORG"],
+  "command": "sherlock {target} --site GitHub --site Twitter --site Instagram --site TikTok --site Reddit --site Spotify --site Steam --site Twitch --site YouTube --site Pinterest --site Snapchat --site Telegram --timeout 5",
+  "timeout": 30,
+  "description": "Hunt down social media profiles across top 12 global platforms.",
+  "runner": "native"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "subfinder_enum",
+  "display_name": "Subfinder",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN"],
+  "command": "subfinder -d {target} -silent -timeout 5",
+  "timeout": 15,
+  "description": "Passive subdomain discovery via public sources",
+  "runner": "native"
+}

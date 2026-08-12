@@ -1,0 +1,12 @@
+{
+  "name": "osint_whois",
+  "display_name": "WHOIS Lookup",
+  "category": "OSINT",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["IP", "DOMAIN"],
+  "command": "whois {target}",
+  "timeout": 10,
+  "description": "Query registration and ownership data via WHOIS",
+  "runner": "native"
+}

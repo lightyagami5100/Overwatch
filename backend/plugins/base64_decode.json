@@ -1,0 +1,12 @@
+{
+  "name": "base64_decode",
+  "display_name": "Base64 Decode",
+  "category": "Cipher/Crypto",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["TEXT_BLOB"],
+  "command": "echo '{target}' | base64 -d",
+  "timeout": 5,
+  "description": "Decode Base64-encoded strings to plaintext",
+  "runner": "native"
+}

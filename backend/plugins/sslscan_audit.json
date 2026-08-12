@@ -1,0 +1,12 @@
+{
+  "name": "sslscan_audit",
+  "display_name": "SSLScan",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN", "IP"],
+  "command": "sslscan --no-colour {target}",
+  "timeout": 15,
+  "description": "Audit SSL/TLS configuration — ciphers, protocols, cert info",
+  "runner": "native"
+}

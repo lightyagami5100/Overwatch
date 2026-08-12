@@ -1,0 +1,12 @@
+{
+  "name": "httpx_probe",
+  "display_name": "HTTPx Probe",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN", "IP"],
+  "command": "echo '{target}' | httpx -silent -status-code -title -tech-detect -timeout 5",
+  "timeout": 15,
+  "description": "HTTP probe — status codes, page titles, and tech stack detection",
+  "runner": "native"
+}

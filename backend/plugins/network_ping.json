@@ -1,0 +1,12 @@
+{
+  "name": "network_ping",
+  "display_name": "Ping Host",
+  "category": "Network Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["IP", "DOMAIN"],
+  "command": "ping -c 1 -W 2 {target}",
+  "timeout": 5,
+  "description": "ICMP echo to check host liveness and latency",
+  "runner": "native"
+}

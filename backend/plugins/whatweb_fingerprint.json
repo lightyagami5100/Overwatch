@@ -1,0 +1,12 @@
+{
+  "name": "whatweb_fingerprint",
+  "display_name": "WhatWeb",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN", "IP"],
+  "command": "whatweb -q --color=never {target}",
+  "timeout": 15,
+  "description": "Web technology fingerprinting — CMS, frameworks, servers",
+  "runner": "native"
+}

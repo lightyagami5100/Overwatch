@@ -1,0 +1,12 @@
+{
+  "name": "dig_records",
+  "display_name": "Dig DNS",
+  "category": "DNS",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN"],
+  "command": "dig {target} ANY +short",
+  "timeout": 10,
+  "description": "Query all DNS record types (A, MX, NS, TXT, etc.)",
+  "runner": "native"
+}
