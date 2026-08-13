@@ -38,6 +38,10 @@ body {
   letter-spacing: -0.02em; /* Tighter tracking on large text */
 }
 
+.font-caesar {
+  font-family: var(--font-caesar), system-ui, sans-serif;
+}
+
 /* Apple Glass Panel (Nova Theme) */
 .apple-glass {
   background: rgba(15, 15, 20, 0.7);

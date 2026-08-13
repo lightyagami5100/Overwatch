@@ -10,7 +10,7 @@ import { QuickScanPanel } from "@/components/QuickScanPanel";
 import { GraphViewer } from "@/components/GraphViewer";
 import { EntityInspector } from "@/components/EntityInspector";
 import { EvidenceVault } from "@/components/EvidenceVault";
-import { useDeepTrace } from "@/hooks/useDeepTrace";
+import { useOverwatch } from "@/hooks/useOverwatch";
 import { ManualModal } from "@/components/ManualModal";
 import { DemoOverlay } from "@/components/DemoOverlay";
 
@@ -45,7 +45,7 @@ export default function DashboardPage() {
     loadCaseFiles,
     loadCaseGraph,
     removeCaseFile,
-  } = useDeepTrace();
+  } = useOverwatch();
 
   // Sidebar toggle state
   const [activePanel, setActivePanel] = useState<"ingestion" | "terminal" | "quickscan" | null>(null);

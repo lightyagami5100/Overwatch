@@ -27,7 +27,7 @@ export function TopNav({ wallpapers, currentWallpaper, onWallpaperChange, onOpen
               <circle cx="12" cy="12" r="3" fill="white" />
             </svg>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-white apple-heading">
+          <h1 className="text-2xl tracking-tight text-white font-caesar">
             Overwatch
           </h1>
           <span className="ml-2 px-2 py-0.5 rounded-full bg-white/10 text-white/60 text-xs font-medium">

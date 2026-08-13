@@ -16,7 +16,7 @@ import type {
   ProcessedIntel,
 } from "@/lib/types";
 
-export function useDeepTrace() {
+export function useOverwatch() {
   // Graph state
   const [graphData, setGraphData] = useState<GraphData>({ nodes: [], links: [] });
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);

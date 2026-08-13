@@ -39,7 +39,8 @@ BACKEND_PID=$!
 echo -e "${GREEN}✓ Backend started (PID: $BACKEND_PID)${NC}"
 
 # --- Start Frontend ---
-echo -e "${YELLOW}[2/2]${NC} Starting Next.js frontend on port 3000..."
+echo -e "${YELLOW}[2/4]${NC} Starting Frontend on port 3000..."
+FRONTEND_DIR="/home/yagami/Desktop/Flux/overwatch"
 cd "$FRONTEND_DIR"
 npm run dev &
 FRONTEND_PID=$!

@@ -5,3 +5,15 @@ __pycache__/
 *.pyc
 .venv/
 node_modules/
+
+# Security - Private Data & API Keys
+.env
+.env.*
+*.db
+*.sqlite
+cases.db
+backend/deeptrace.db
+backend/overwatch.db
+case_files/
+data/
+logs/

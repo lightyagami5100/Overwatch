@@ -1,5 +1,5 @@
 """
-Database engine, session management, and seed data for DeepTrace.
+Database engine, session management, and seed data for Overwatch.
 """
 
 import hashlib
@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from models import Base, CaseFile, Link, Node
 
-DATABASE_URL = "sqlite+aiosqlite:///./deeptrace.db"
+DATABASE_URL = "sqlite+aiosqlite:///./overwatch.db"
 
 engine = create_async_engine(DATABASE_URL, echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

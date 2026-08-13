@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Caesar_Dressing } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -10,6 +10,12 @@ const inter = Inter({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+});
+
+const caesarDressing = Caesar_Dressing({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-caesar",
 });
 
 export const metadata: Metadata = {
@@ -29,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`h-full antialiased ${inter.variable} ${jetbrainsMono.variable} ${caesarDressing.variable}`}
     >
       <body className="min-h-full flex flex-col bg-[#000000] text-[#f5f5f7]">
         {children}

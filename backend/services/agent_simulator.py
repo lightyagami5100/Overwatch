@@ -25,7 +25,7 @@ async def generate_agent_logs(
         AgentLog(
             timestamp=_now(),
             agent="SWARM_CTRL",
-            message="Initializing DeepTrace AI Swarm...",
+            message="Initializing Overwatch AI Swarm...",
             level="INFO",
         ),
         AgentLog(

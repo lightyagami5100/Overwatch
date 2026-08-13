@@ -24,9 +24,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="OVERWATCH API",
-    description="Tactical Backend for Threat Analysis and Intelligence Processing",
-    version="2.0.0",
+    title="Overwatch Backend",
+    description="OSINT and Threat Intel Aggregation API",
+    version="1.0.0",
     lifespan=lifespan,
 )
 

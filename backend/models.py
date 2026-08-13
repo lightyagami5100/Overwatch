@@ -1,5 +1,5 @@
 """
-SQLAlchemy ORM models for the DeepTrace evidence vault.
+SQLAlchemy ORM models for the Overwatch evidence vault.
 """
 
 import uuid
