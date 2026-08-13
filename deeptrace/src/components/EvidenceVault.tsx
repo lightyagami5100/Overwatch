@@ -20,12 +20,12 @@ export function EvidenceVault({
     <div className="flex flex-col h-full text-white">
       <div className="p-4 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Database className="w-5 h-5 text-blue-400" />
+          <Database className="w-5 h-5 text-indigo-400" />
           <h2 className="text-base font-semibold tracking-tight apple-heading">
             Evidence Vault
           </h2>
         </div>
-        <div className="px-2 py-0.5 bg-blue-500/10 text-blue-400 text-[10px] font-bold rounded uppercase tracking-widest border border-blue-500/20">
+        <div className="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[10px] font-bold rounded uppercase tracking-widest border border-indigo-500/20">
           SHA-256 SECURED
         </div>
       </div>
@@ -47,14 +47,14 @@ export function EvidenceVault({
                   relative group cursor-pointer border rounded-2xl p-4 transition-all duration-300
                   ${
                     isActive
-                      ? "bg-blue-600/20 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                      ? "bg-indigo-600/20 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]"
                       : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20"
                   }
                 `}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2 truncate">
-                    <FileText className={`w-4 h-4 ${isActive ? "text-blue-400" : "text-white/60"}`} />
+                    <FileText className={`w-4 h-4 ${isActive ? "text-indigo-400" : "text-white/60"}`} />
                     <span className="text-sm font-semibold truncate text-white/90">
                       {cf.filename}
                     </span>

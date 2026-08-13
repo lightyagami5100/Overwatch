@@ -1,0 +1,10 @@
+{
+  "name": "nmap_fast",
+  "display_name": "Fast Port Scan",
+  "description": "Executes a fast port scan to discover open ports and services.",
+  "category": "Recon",
+  "speed": "slow",
+  "danger_level": "medium",
+  "entity_type": ["IP", "DOMAIN"],
+  "command": "nmap -F -Pn {target}"
+}

@@ -45,12 +45,20 @@ npm run dev &
 FRONTEND_PID=$!
 echo -e "${GREEN}✓ Frontend started (PID: $FRONTEND_PID)${NC}"
 
+# --- Start Ollama ---
+echo -e "${YELLOW}[3/4]${NC} Starting Local AI Backend (Ollama) on port 11435..."
+OLLAMA_HOST=127.0.0.1:11435 ollama serve &
+OLLAMA_PID=$!
+echo -e "${YELLOW}Waiting for Ollama to initialize...${NC}"
+sleep 3
+echo -e "${GREEN}✓ Ollama started (PID: $OLLAMA_PID)${NC}"
+
 # --- Start Chatbot ---
-echo -e "${YELLOW}[3/3]${NC} Starting AI Chatbot on port 3001..."
+echo -e "${YELLOW}[4/4]${NC} Starting AI Chatbot on port 3001..."
 CHATBOT_DIR="/home/yagami/Desktop/Nova - Gilani/chatbot-ollama"
 cd "$CHATBOT_DIR"
 if [ -d "node_modules" ]; then
-    PORT=3001 npm run dev &
+    PORT=3001 npm start &
     CHATBOT_PID=$!
     echo -e "${GREEN}✓ Chatbot started (PID: $CHATBOT_PID)${NC}"
 else
@@ -70,7 +78,7 @@ echo ""
 echo -e "${YELLOW}Press Ctrl+C to stop all services${NC}"
 
 # Trap Ctrl+C to kill all processes
-trap "echo -e '\n${RED}Shutting down systems...${NC}'; kill $BACKEND_PID $FRONTEND_PID $CHATBOT_PID 2>/dev/null; exit 0" SIGINT SIGTERM
+trap "echo -e '\n${RED}Shutting down systems...${NC}'; kill $BACKEND_PID $FRONTEND_PID $OLLAMA_PID $CHATBOT_PID 2>/dev/null; exit 0" SIGINT SIGTERM
 
 # Wait for either process to exit
 wait

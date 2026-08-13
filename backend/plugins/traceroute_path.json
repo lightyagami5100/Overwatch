@@ -1,0 +1,10 @@
+{
+  "name": "traceroute_path",
+  "display_name": "Traceroute",
+  "description": "Runs a network path trace to map out the hops to the target.",
+  "category": "Network",
+  "speed": "slow",
+  "danger_level": "safe",
+  "entity_type": ["IP", "DOMAIN"],
+  "command": "traceroute -m 15 -q 1 -w 1 {target}"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "ipinfo_lookup",
+  "display_name": "IP Geolocation",
+  "description": "Performs a rapid geolocation and ASN lookup against ipinfo.io.",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["IP"],
+  "command": "curl -s ipinfo.io/{target}"
+}

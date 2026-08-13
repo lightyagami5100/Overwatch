@@ -11,6 +11,26 @@ import { GraphViewer } from "@/components/GraphViewer";
 import { EntityInspector } from "@/components/EntityInspector";
 import { EvidenceVault } from "@/components/EvidenceVault";
 import { useDeepTrace } from "@/hooks/useDeepTrace";
+import { ManualModal } from "@/components/ManualModal";
+import { DemoOverlay } from "@/components/DemoOverlay";
+
+const WALLPAPERS = [
+  "102738435239242554.jpg",
+  "1134555331150821854.jpg",
+  "1139410774493628087.jpg",
+  "2040762329295531.jpg",
+  "583779170485896804.jpg",
+  "691935930286943025.jpg",
+  "912964155750623758.jpg",
+  "Cat -NO, I'M NOT A HUMAN.jpg",
+  "Facebook.jpg",
+  "Green08.jpg",
+  "Jelly dessert.jpg",
+  "Purple (Dark).jpg",
+  "ff40e9be579443299206f027e2a64a69.jpg",
+  "meowl windows oboi.jpg",
+  "wp11435508-attack-on-titan-ocean-wallpapers.jpg"
+];
 
 export default function DashboardPage() {
   const {
@@ -33,13 +53,28 @@ export default function DashboardPage() {
   // Chatbot modal state
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
+  // Wallpaper state
+  const [currentWallpaper, setCurrentWallpaper] = useState<string>("Purple (Dark).jpg");
+
+  // Manual & Demo state
+  const [isManualOpen, setIsManualOpen] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(false);
+
   const togglePanel = (panel: "ingestion" | "terminal" | "quickscan") => {
     setActivePanel(prev => (prev === panel ? null : panel));
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden apple-mesh-bg">
-      <TopNav />
+    <div 
+      className={`flex flex-col h-screen overflow-hidden ${!currentWallpaper ? "apple-mesh-bg" : "bg-cover bg-center bg-no-repeat transition-all duration-700"}`}
+      style={currentWallpaper ? { backgroundImage: `url('/wallpapers/${currentWallpaper}')` } : {}}
+    >
+      <TopNav 
+        wallpapers={WALLPAPERS} 
+        currentWallpaper={currentWallpaper} 
+        onWallpaperChange={setCurrentWallpaper} 
+        onOpenManual={() => setIsManualOpen(true)}
+      />
 
       <main className="flex-1 p-4 lg:p-6 flex gap-4 lg:gap-6 min-h-0 relative z-10 w-full overflow-hidden">
         
@@ -56,10 +91,12 @@ export default function DashboardPage() {
               onClick={() => togglePanel("ingestion")}
               className={`p-3 rounded-full transition-all ${
                 activePanel === "ingestion"
-                  ? "bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]" 
+                  ? "bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
                   : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white"
               }`}
               title="Target Intel Input"
+              data-demo-title="Intelligence Ingestion"
+              data-demo-desc="Upload or enter raw intel (IPs, domains, emails). DeepTrace will automatically parse the data and prepare it for active OSINT scanning."
             >
               <UploadCloud className="w-5 h-5" />
             </button>
@@ -68,10 +105,12 @@ export default function DashboardPage() {
               onClick={() => togglePanel("terminal")}
               className={`p-3 rounded-full transition-all ${
                 activePanel === "terminal"
-                  ? "bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.5)]" 
+                  ? "bg-purple-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
                   : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white"
               }`}
               title="Live Terminal Feed"
+              data-demo-title="Live Terminal"
+              data-demo-desc="Watch backend tasks execute in real-time. This terminal streams stdout from the Python OSINT engine directly to your dashboard."
             >
               <Terminal className="w-5 h-5" />
             </button>
@@ -80,10 +119,12 @@ export default function DashboardPage() {
               onClick={() => togglePanel("quickscan")}
               className={`p-3 rounded-full transition-all ${
                 activePanel === "quickscan"
-                  ? "bg-purple-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.5)]" 
+                  ? "bg-white text-indigo-900 shadow-[0_0_15px_rgba(255,255,255,0.5)]" 
                   : "bg-white/10 hover:bg-white/20 text-white/70 hover:text-white"
               }`}
               title="OSINT Quick Scan"
+              data-demo-title="OSINT Engine"
+              data-demo-desc="Trigger parallelized OSINT modules (Nmap, Dig, WhatWeb) against your targets and automatically compile the intelligence."
             >
               <Search className="w-5 h-5" />
             </button>
@@ -92,6 +133,8 @@ export default function DashboardPage() {
               onClick={() => setIsChatbotOpen(true)}
               className="p-3 rounded-full transition-all bg-white/10 hover:bg-white/20 text-white/70 hover:text-white mt-auto"
               title="Nova AI Assistant"
+              data-demo-title="Nova AI Analyst"
+              data-demo-desc="A fully localized AI agent powered by Ollama. Connects to your Evidence Vault to answer specific queries about your ongoing cases without leaving the network."
             >
               <Bot className="w-5 h-5 text-indigo-400" />
             </button>
@@ -172,7 +215,11 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* Center Column: 3D Graph Viewer (flex-1 expands to fill space) */}
-        <div className="flex-1 flex flex-col min-w-0 apple-glass rounded-3xl overflow-hidden shadow-xl relative">
+        <div 
+          className="flex-1 flex flex-col min-w-0 apple-glass rounded-3xl overflow-hidden shadow-xl relative"
+          data-demo-title="3D Correlation Engine"
+          data-demo-desc="Uses Force-Directed WebGL rendering to visualize intelligence targets and their relationships in a 3D physical space, making large datasets easy to comprehend instantly."
+        >
           <div className="absolute top-6 left-6 z-20 pointer-events-none">
             <h2 className="text-xl font-semibold text-white apple-heading">
               Entity Correlation Graph
@@ -190,7 +237,11 @@ export default function DashboardPage() {
 
         {/* Right Column: Evidence Vault & Inspector (fixed width) */}
         <div className="w-[320px] lg:w-[380px] shrink-0 flex flex-col gap-4 lg:gap-6 min-h-0">
-          <div className="apple-glass rounded-3xl flex flex-col h-[40%] p-0 overflow-hidden shadow-xl">
+          <div 
+            className="apple-glass rounded-3xl flex flex-col h-[40%] p-0 overflow-hidden shadow-xl"
+            data-demo-title="Evidence Vault"
+            data-demo-desc="A secure local storage database. All OSINT scans are automatically saved here as immutable case files for later review and correlation without re-scanning."
+          >
             <EvidenceVault
               caseFiles={caseFiles}
               activeCaseId={activeCaseId}
@@ -198,7 +249,11 @@ export default function DashboardPage() {
               onDeleteCase={removeCaseFile}
             />
           </div>
-          <div className="apple-glass rounded-3xl flex flex-col h-[60%] p-0 overflow-hidden shadow-xl">
+          <div 
+            className="apple-glass rounded-3xl flex flex-col h-[60%] p-0 overflow-hidden shadow-xl"
+            data-demo-title="Entity Inspector"
+            data-demo-desc="Click on any node in the 3D graph to inspect it here. The inspector decodes raw API outputs and JSON responses into human-readable intel."
+          >
             <EntityInspector
               selectedNode={selectedNode}
               graphData={graphData}
@@ -218,42 +273,55 @@ export default function DashboardPage() {
               className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100]"
               onClick={() => setIsChatbotOpen(false)}
             />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-              className="fixed inset-4 md:inset-10 z-[101] flex flex-col apple-glass shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-3xl overflow-hidden border border-white/10"
-            >
-              <div className="flex items-center justify-between p-4 bg-white/5 border-b border-white/10 backdrop-blur-3xl shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/20">
-                    <Bot className="w-5 h-5" />
+            <div className="fixed inset-4 md:inset-10 z-[101] pointer-events-none flex">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+                className="flex-1 w-full flex flex-col apple-glass shadow-[0_0_80px_rgba(0,0,0,0.8)] rounded-3xl overflow-hidden border border-white/10 pointer-events-auto"
+              >
+                <div className="flex items-center justify-between p-4 bg-white/5 border-b border-white/10 backdrop-blur-3xl shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-xl border border-indigo-500/20">
+                      <Bot className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold text-white apple-heading leading-tight">Nova AI Assistant</h2>
+                      <p className="text-[11px] text-white/50 font-medium tracking-wide uppercase">DeepTrace Integration</p>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-white apple-heading leading-tight">Nova AI Assistant</h2>
-                    <p className="text-[11px] text-white/50 font-medium tracking-wide uppercase">DeepTrace Integration</p>
-                  </div>
+                  <button
+                    onClick={() => setIsChatbotOpen(false)}
+                    className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setIsChatbotOpen(false)}
-                  className="p-2 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="flex-1 w-full bg-black relative">
-                <iframe 
-                  src="http://localhost:3001" 
-                  className="w-full h-full border-none absolute inset-0"
-                  title="Nova Chatbot"
-                  allow="microphone"
-                />
-              </div>
-            </motion.div>
+                <div className="flex-1 w-full bg-black relative">
+                  <iframe 
+                    src="http://localhost:3001" 
+                    className="w-full h-full border-none absolute inset-0"
+                    title="Nova Chatbot"
+                    allow="microphone"
+                  />
+                </div>
+              </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
+
+      <ManualModal 
+        isOpen={isManualOpen} 
+        onClose={() => setIsManualOpen(false)} 
+        onStartDemo={() => setIsDemoMode(true)} 
+      />
+      
+      <DemoOverlay 
+        isActive={isDemoMode} 
+        onClose={() => setIsDemoMode(false)} 
+      />
     </div>
   );
 }

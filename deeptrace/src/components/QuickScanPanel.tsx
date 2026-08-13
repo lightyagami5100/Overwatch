@@ -95,7 +95,7 @@ export function QuickScanPanel({ onScanComplete }: QuickScanPanelProps) {
               setSelectedToolName(e.target.value);
               setTargetInput("");
             }}
-            className="w-full h-10 appearance-none bg-black/40 border border-white/10 rounded-xl px-3 py-0 text-sm text-white outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all font-semibold cursor-pointer shadow-inner"
+            className="w-full h-10 appearance-none bg-black/40 border border-white/10 rounded-xl px-3 py-0 text-sm text-white outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all font-semibold cursor-pointer shadow-inner"
           >
             {Object.entries(categories).map(([catName, tools]) => (
               <optgroup key={catName} label={catName} className="bg-gray-900 text-white/50 font-semibold">
@@ -118,7 +118,7 @@ export function QuickScanPanel({ onScanComplete }: QuickScanPanelProps) {
             value={targetInput}
             onChange={(e) => setTargetInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleScan()}
-            className="w-full h-10 bg-black/40 border border-white/10 rounded-xl px-3 py-0 text-sm text-white outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all font-mono shadow-inner"
+            className="w-full h-10 bg-black/40 border border-white/10 rounded-xl px-3 py-0 text-sm text-white outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all font-mono shadow-inner"
           />
         </div>
 
@@ -132,7 +132,7 @@ export function QuickScanPanel({ onScanComplete }: QuickScanPanelProps) {
         <button
           onClick={handleScan}
           disabled={!!executingTool || !targetInput || !selectedTool}
-          className="h-10 w-full bg-blue-600 hover:bg-blue-500 disabled:bg-white/10 disabled:text-white/30 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-blue-500/20 disabled:shadow-none uppercase tracking-wider"
+          className="h-10 w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-white/10 disabled:text-white/30 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-indigo-500/20 disabled:shadow-none uppercase tracking-wider"
         >
           {executingTool ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
           {executingTool ? "Scanning..." : "Execute Scan"}
@@ -149,8 +149,8 @@ export function QuickScanPanel({ onScanComplete }: QuickScanPanelProps) {
             </span>
           </div>
           {executingTool && (
-            <div className="flex items-center gap-2 px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[9px] font-bold uppercase tracking-wider">
-              <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" />
+            <div className="flex items-center gap-2 px-1.5 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[9px] font-bold uppercase tracking-wider">
+              <div className="w-1 h-1 bg-indigo-400 rounded-full animate-pulse" />
               Running
             </div>
           )}

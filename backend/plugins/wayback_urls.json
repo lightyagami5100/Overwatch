@@ -1,0 +1,10 @@
+{
+  "name": "wayback_urls",
+  "display_name": "Wayback URLs",
+  "description": "Queries the Wayback Machine API to find archived endpoints for a domain.",
+  "category": "Recon",
+  "speed": "fast",
+  "danger_level": "safe",
+  "entity_type": ["DOMAIN"],
+  "command": "curl -s \"http://web.archive.org/cdx/search/cdx?url=*.{target}/*&output=json&limit=10\""
+}
