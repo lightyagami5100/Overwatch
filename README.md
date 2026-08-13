@@ -10,41 +10,41 @@
 ![Ollama](https://img.shields.io/badge/Ollama-Local_LLM-white?style=for-the-badge&logo=ollama)
 ![Arch Linux](https://img.shields.io/badge/EndeavourOS-Optimized-1793d1?style=for-the-badge&logo=arch-linux)
 
-Ever tried running half a dozen reconnaissance tools during an investigation and ended up drowning in unstructured terminal noise? That is exactly why I built **Overwatch Protocol** (internally codenamed Flux)[cite: 5]. 
+Ever tried running half a dozen reconnaissance tools during an investigation and ended up drowning in unstructured terminal noise? That is exactly why I built **Overwatch Protocol** (internally codenamed Flux). 
 
-It is a completely decentralized, high-performance Incident Command Center designed to run 100% locally on your machine[cite: 5]. No cloud APIs, no data leaks, and absolute data sovereignty[cite: 5]. It takes raw CLI output, figures out the entity relationships, maps them in 3D space, and gives you an AI threat briefing—all without your data ever leaving your device[cite: 5].
+It is a completely decentralized, high-performance Incident Command Center designed to run 100% locally on your machine. No cloud APIs, no data leaks, and absolute data sovereignty. It takes raw CLI output, figures out the entity relationships, maps them in 3D space, and gives you an AI threat briefing—all without your data ever leaving your device.
 
 ---
 
 ## ⚡ What It Actually Does
 
-*   **🕸️ Visualizing the Chaos:** Instead of reading text logs, Overwatch extracts IPs, domains, and emails using Regex and `spaCy` NLP, and instantly plots them on an interactive 3D WebGL knowledge graph[cite: 5].
-*   **⚙️ Native OSINT Execution:** It safely runs real Linux binaries (like `dig`, `nmap`, or `sherlock`) asynchronously under the hood using Python's `asyncio`[cite: 5].
-*   **🧠 Local AI Brain:** It pipes the reconnaissance data into an offline Ollama LLM (running locally on port 11435) to stream a real-time executive threat briefing straight to your dashboard[cite: 5].
-*   **🔒 Bulletproof Evidence:** Every investigation is sealed into a local SQLite vault and stamped with a SHA-256 cryptographic hash so you can prove the data was not tampered with[cite: 5].
-*   **🌑 Command Center UI:** A sleek, dark-mode glassmorphism interface built from the ground up using Next.js 16 App Router, Tailwind CSS v4, and Framer Motion[cite: 5].
+*   **🕸️ Visualizing the Chaos:** Instead of reading text logs, Overwatch extracts IPs, domains, and emails using Regex and `spaCy` NLP, and instantly plots them on an interactive 3D WebGL knowledge graph.
+*   **⚙️ Native OSINT Execution:** It safely runs real Linux binaries (like `dig`, `nmap`, or `sherlock`) asynchronously under the hood using Python's `asyncio`.
+*   **🧠 Local AI Brain:** It pipes the reconnaissance data into an offline Ollama LLM (running locally on port 11435) to stream a real-time executive threat briefing straight to your dashboard.
+*   **🔒 Bulletproof Evidence:** Every investigation is sealed into a local SQLite vault and stamped with a SHA-256 cryptographic hash so you can prove the data was not tampered with.
+*   **🌑 Command Center UI:** A sleek, dark-mode glassmorphism interface built from the ground up using Next.js 16 App Router, Tailwind CSS v4, and Framer Motion.
 
 ---
 
 ## 💻 The Tech Stack
 
-I wanted this stack to be fast, modern, and highly concurrent[cite: 5]. 
+I wanted this stack to be fast, modern, and highly concurrent. 
 
 **Frontend:**
-*   **Next.js (16.3.0) & React (19.2.8):** For the core UI and routing[cite: 5].
-*   **react-force-graph (1.29.1) & Three.js:** To power the 3D entity mapping[cite: 5].
-*   **Tailwind CSS (4.0.0) & Framer Motion (13.1.0):** For styling and liquid UI transitions[cite: 5].
+*   **Next.js (16.3.0) & React (19.2.8):** For the core UI and routing.
+*   **react-force-graph (1.29.1) & Three.js:** To power the 3D entity mapping.
+*   **Tailwind CSS (4.0.0) & Framer Motion (13.1.0):** For styling and liquid UI transitions.
 
 **Backend:**
-*   **FastAPI (≥0.115.0) & Uvicorn (≥0.34.0):** To handle high-throughput async endpoints and Server-Sent Events (SSE) streaming[cite: 5].
-*   **SQLAlchemy (≥2.0.0) & aiosqlite (≥0.20.0):** For non-blocking database I/O[cite: 5].
-*   **Pydantic & spaCy:** For strict data validation and Named Entity Recognition[cite: 5].
+*   **FastAPI (≥0.115.0) & Uvicorn (≥0.34.0):** To handle high-throughput async endpoints and Server-Sent Events (SSE) streaming.
+*   **SQLAlchemy (≥2.0.0) & aiosqlite (≥0.20.0):** For non-blocking database I/O.
+*   **Pydantic & spaCy:** For strict data validation and Named Entity Recognition.
 
 ---
 
 ## 🚀 Getting Started
 
-If you want to spin this up on your own machine, you will need a solid Linux environment (I recommend Arch Linux or EndeavourOS), at least 16GB of RAM (32GB if you want the local LLM to really fly), and your native OSINT tools installed globally[cite: 5].
+If you want to spin this up on your own machine, you will need a solid Linux environment (I recommend Arch Linux or EndeavourOS), at least 16GB of RAM (32GB if you want the local LLM to really fly), and your native OSINT tools installed globally.
 
 **1. Clone the repo**
 ```bash
