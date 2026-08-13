@@ -5,7 +5,7 @@
   "speed": "fast",
   "danger_level": "safe",
   "entity_type": ["DOMAIN", "IP"],
-  "command": "whatweb -q --color=never {target}",
+  "command": "whatweb -q --color=never http://{target}",
   "timeout": 15,
   "description": "Web technology fingerprinting — CMS, frameworks, servers",
   "runner": "native"

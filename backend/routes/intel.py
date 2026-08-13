@@ -219,6 +219,10 @@ async def execute_tool_direct(
     tools = registry.get_tools_for_entity(request.entity_type)
     tools_to_run = [t for t in tools if t.get("category") == request.category]
     
+    # If a specific tool_name is provided, narrow down to just that tool
+    if request.tool_name:
+        tools_to_run = [t for t in tools_to_run if t.get("name") == request.tool_name]
+    
     if not tools_to_run:
         raise HTTPException(status_code=404, detail=f"No tools found for category '{request.category}' and entity type '{request.entity_type}'")
         

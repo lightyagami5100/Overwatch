@@ -38,6 +38,7 @@ class DirectToolExecutionRequest(BaseModel):
     target: str = Field(..., description="The target string (IP, domain, email, etc).")
     entity_type: str = Field(..., description="The type of entity (e.g. 'IP', 'EMAIL').")
     category: str = Field(..., description="The category of tools to run.")
+    tool_name: Optional[str] = Field(None, description="If provided, run only this specific tool instead of all tools in the category.")
 
 
 # ---------------------------------------------------------------------------

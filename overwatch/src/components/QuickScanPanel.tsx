@@ -55,7 +55,8 @@ export function QuickScanPanel({ onScanComplete }: QuickScanPanelProps) {
         body: JSON.stringify({ 
           target: targetInput, 
           entity_type: entityType, 
-          category: selectedTool.category
+          category: selectedTool.category,
+          tool_name: selectedTool.name
         }),
       });
       

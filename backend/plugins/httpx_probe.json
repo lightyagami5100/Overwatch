@@ -5,8 +5,8 @@
   "speed": "fast",
   "danger_level": "safe",
   "entity_type": ["DOMAIN", "IP"],
-  "command": "echo '{target}' | httpx -silent -status-code -title -tech-detect -timeout 5",
+  "command": "httpx --no-verify --follow-redirects --timeout 5 http://{target}",
   "timeout": 15,
-  "description": "HTTP probe — status codes, page titles, and tech stack detection",
+  "description": "HTTP probe — fetches response headers, status codes, and server info from the target",
   "runner": "native"
 }

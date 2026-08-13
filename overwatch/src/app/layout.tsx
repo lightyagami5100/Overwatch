@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Caesar_Dressing } from "next/font/google";
+import { JetBrains_Mono, Caesar_Dressing, Montserrat, Karla } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const karla = Karla({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["800"], // The user specifically requested weight 800 in the link
+  variable: "--font-heading",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -35,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${inter.variable} ${jetbrainsMono.variable} ${caesarDressing.variable}`}
+      className={`h-full antialiased ${karla.variable} ${montserrat.variable} ${jetbrainsMono.variable} ${caesarDressing.variable}`}
     >
       <body className="min-h-full flex flex-col bg-[#000000] text-[#f5f5f7]">
         {children}
