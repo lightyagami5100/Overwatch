@@ -16,17 +16,17 @@ It is a completely decentralized, high-performance Incident Command Center desig
 
 ---
 
-## ⚡ What It Actually Does
+##  What It Actually Does
 
-*   **🕸️ Visualizing the Chaos:** Instead of reading text logs, Overwatch extracts IPs, domains, and emails using Regex and `spaCy` NLP, and instantly plots them on an interactive 3D WebGL knowledge graph.
-*   **⚙️ Native OSINT Execution:** It safely runs real Linux binaries (like `dig`, `nmap`, or `sherlock`) asynchronously under the hood using Python's `asyncio`.
-*   **🧠 Local AI Brain:** It pipes the reconnaissance data into an offline Ollama LLM (running locally on port 11435) to stream a real-time executive threat briefing straight to your dashboard.
-*   **🔒 Bulletproof Evidence:** Every investigation is sealed into a local SQLite vault and stamped with a SHA-256 cryptographic hash so you can prove the data was not tampered with.
-*   **🌑 Command Center UI:** A sleek, dark-mode glassmorphism interface built from the ground up using Next.js 16 App Router, Tailwind CSS v4, and Framer Motion.
+*   **Visualizing the Chaos:** Instead of reading text logs, Overwatch extracts IPs, domains, and emails using Regex and `spaCy` NLP, and instantly plots them on an interactive 3D WebGL knowledge graph.
+*   **Native OSINT Execution:** It safely runs real Linux binaries (like `dig`, `nmap`, or `sherlock`) asynchronously under the hood using Python's `asyncio`.
+*   **Local AI Brain:** It pipes the reconnaissance data into an offline Ollama LLM (running locally on port 11435) to stream a real-time executive threat briefing straight to your dashboard.
+*   **Bulletproof Evidence:** Every investigation is sealed into a local SQLite vault and stamped with a SHA-256 cryptographic hash so you can prove the data was not tampered with.
+*   **Command Center UI:** A sleek, dark-mode glassmorphism interface built from the ground up using Next.js 16 App Router, Tailwind CSS v4, and Framer Motion.
 
 ---
 
-## 💻 The Tech Stack
+## The Tech Stack
 
 I wanted this stack to be fast, modern, and highly concurrent. 
 
@@ -42,7 +42,7 @@ I wanted this stack to be fast, modern, and highly concurrent.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 If you want to spin this up on your own machine, you will need a solid Linux environment (I recommend Arch Linux or EndeavourOS), at least 16GB of RAM (32GB if you want the local LLM to really fly), and your native OSINT tools installed globally.
 
@@ -87,7 +87,7 @@ Hit `http://localhost:3000` in your browser and you are good to go.
 
 ---
 
-## 🛡️ The Zero-Trust Promise
+##  The Zero-Trust Promise
 
 I built this with a paranoid security mindset:
 
@@ -103,7 +103,7 @@ I built this with a paranoid security mindset:
 
 ---
 
-## 👨‍💻 Built By
+##  Built By
 
 **Abdul Rahman Gilani**
 
