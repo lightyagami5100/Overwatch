@@ -49,8 +49,9 @@ async def process_intel(
     """
 
     async def event_stream() -> AsyncGenerator[str, None]:
+        import asyncio
         # Step 1: Process the raw text
-        result = process_raw_intel(submission.raw_text)
+        result = await asyncio.to_thread(process_raw_intel, submission.raw_text)
         entities = result["entities"]
         links = result["links"]
         threat_level = result["threat_level"]
@@ -233,8 +234,9 @@ async def execute_tool_direct(
         
     combined_result = "\n\n".join(new_results)
     
+    import asyncio
     # Send the raw terminal output through the NLP pipeline
-    processed = process_raw_intel(combined_result)
+    processed = await asyncio.to_thread(process_raw_intel, combined_result)
     entities = processed["entities"]
     links = processed["links"]
     threat_level = processed["threat_level"]

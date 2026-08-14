@@ -15,7 +15,7 @@ class TTSRequest(BaseModel):
     voice: str = "default"
 
 @router.post("")
-async def generate_audio(req: TTSRequest):
+def generate_audio(req: TTSRequest):
     try:
         audio_bytes = tts_service.synthesize(req.text)
         return StreamingResponse(io.BytesIO(audio_bytes), media_type="audio/wav")

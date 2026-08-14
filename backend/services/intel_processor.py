@@ -2,9 +2,11 @@
 Intelligence processor: extracts entities, classifies threats, and maps
 relationships from raw unstructured text.
 
-Uses SpaCy (en_core_web_sm) for ORG, GPE, PERSON extraction alongside
-regex patterns for IPs, emails, domains, CVEs, and hashes. Falls back
-to regex-only if SpaCy model loading fails.
+Uses a three-tier extraction approach:
+  1. Regex patterns for IPs, emails, domains, CVEs, and hashes (fast).
+  2. SpaCy (en_core_web_sm) for ORG, GPE, PERSON extraction.
+  3. LLM (MiniMax via Ollama) for ambiguous / natural-language entities.
+Falls back gracefully at every tier.
 """
 
 import hashlib
@@ -12,6 +14,9 @@ import re
 import uuid
 from dataclasses import dataclass, field
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # SpaCy loading with graceful fallback
@@ -164,7 +169,10 @@ def _threat_to_group(threat_level: str) -> int:
 
 def extract_entities(raw_text: str) -> list[ExtractedEntity]:
     """
-    Extract entities from raw text using regex and optionally SpaCy.
+    Extract entities from raw text using a three-tier approach:
+      1. Regex patterns (IPs, emails, domains, CVEs, hashes)
+      2. SpaCy NER (ORG, GPE, PERSON)
+      3. LLM via Ollama (ambiguous / natural-language entities)
     Returns deduplicated list of ExtractedEntity objects.
     """
     seen_labels: set[str] = set()
@@ -185,7 +193,7 @@ def extract_entities(raw_text: str) -> list[ExtractedEntity]:
         entities.append(ent)
         return ent
 
-    # --- Regex extraction ---
+    # --- Tier 1: Regex extraction ---
     # Emails first (so domains from emails can be excluded)
     email_domains: set[str] = set()
     for match in EMAIL_PATTERN.finditer(raw_text):
@@ -222,7 +230,7 @@ def extract_entities(raw_text: str) -> list[ExtractedEntity]:
     for match in B64_PATTERN.finditer(raw_text):
         _add(match.group(), "TEXT_BLOB")
 
-    # --- SpaCy extraction (ORG, GPE, PERSON) ---
+    # --- Tier 2: SpaCy extraction (ORG, GPE, PERSON) ---
     _spacy_blocklist = {
         "malware", "ransomware", "trojan", "rootkit", "backdoor",
         "payload", "beacon", "exploit", "phishing", "botnet",
@@ -251,6 +259,24 @@ def extract_entities(raw_text: str) -> list[ExtractedEntity]:
                     if text_val.startswith(prefix):
                         text_val = text_val[len(prefix):]
                 _add(text_val, ent.label_)
+
+    # --- Tier 3: LLM extraction (handles ambiguous / natural language) ---
+    try:
+        from services.llm_extractor import extract_entities_with_llm
+
+        llm_entities = extract_entities_with_llm(raw_text)
+        llm_added = 0
+        for ent_dict in llm_entities:
+            label = ent_dict.get("label", "")
+            etype = ent_dict.get("entity_type", "")
+            if label and etype:
+                result = _add(label, etype)
+                if result is not None:
+                    llm_added += 1
+        if llm_added:
+            logger.info(f"LLM enrichment added {llm_added} new entities.")
+    except Exception as exc:
+        logger.warning(f"LLM extraction tier skipped: {exc}")
 
     return entities
 

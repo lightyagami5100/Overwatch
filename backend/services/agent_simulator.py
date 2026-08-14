@@ -42,8 +42,14 @@ async def generate_agent_logs(
         ),
         AgentLog(
             timestamp=_now(),
-            agent="Agent_NER",
-            message=f"Total entities extracted: {entity_count}",
+            agent="Agent_LLM",
+            message="Enriching extraction with MiniMax AI analysis...",
+            level="INFO",
+        ),
+        AgentLog(
+            timestamp=_now(),
+            agent="Agent_LLM",
+            message=f"LLM enrichment complete — total entities: {entity_count}",
             level="SUCCESS",
         ),
         AgentLog(
