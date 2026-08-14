@@ -66,8 +66,8 @@ export function TopNav({ wallpapers, currentWallpaper, onWallpaperChange, onOpen
         {/* Liquid Glass Bubble for Creator */}
         <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.3)] backdrop-blur-xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
-          <span className="text-xs font-bold text-white/60 tracking-widest uppercase">CREATED BY</span>
-          <span className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
+          <span className="text-xs font-bold text-white/60 tracking-widest uppercase font-caesar">CREATED BY</span>
+          <span className="text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70 font-caesar">
             Abdul Rahman Gilani
           </span>
         </div>
