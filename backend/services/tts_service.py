@@ -25,8 +25,10 @@ class TTSService:
         try:
             logger.info("Loading Pocket TTS model and voice state (may take a moment to download)...")
             self.model = self.pocket_tts.TTSModel.load_model()
-            # Get a default voice state
-            self.voice_state = self.model.get_state_for_audio_prompt("hf://kyutai/tts-voices/alba-mackenna/casual.wav")
+            # Use a built-in catalog voice (no HuggingFace auth required)
+            # Available voices: cosette, marius, javert, alba, jean, anna, vera,
+            #   fantine, charles, paul, eponine, azelma, george, mary, jane, michael, eve, etc.
+            self.voice_state = self.model.get_state_for_audio_prompt("alba")
             self.is_ready = True
             logger.info("Pocket TTS is fully initialized and ready.")
         except Exception as e:
