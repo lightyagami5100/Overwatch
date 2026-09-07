@@ -17,3 +17,12 @@ backend/overwatch.db
 case_files/
 data/
 logs/
+
+# Scan & Tool Output Artifacts
+backend/*.txt
+!backend/requirements.txt
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz

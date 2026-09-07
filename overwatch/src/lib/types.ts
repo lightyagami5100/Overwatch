@@ -3,11 +3,28 @@
  * Used throughout the frontend for type-safe data handling.
  */
 
+export type EntityType = 
+  | "IP" 
+  | "CIDR" 
+  | "EMAIL" 
+  | "DOMAIN" 
+  | "ORG" 
+  | "PERSON" 
+  | "GPE" 
+  | "CVE" 
+  | "MITRE" 
+  | "HASH" 
+  | "WALLET" 
+  | "FILE" 
+  | "TEXT";
+
+export type ThreatLevel = "CRITICAL" | "SUSPICIOUS" | "BENIGN";
+
 export interface GraphNode {
   id: string;
   label: string;
-  entity_type: "IP" | "EMAIL" | "DOMAIN" | "ORG" | "PERSON" | "GPE" | "CVE" | "HASH";
-  threat_level: "CRITICAL" | "SUSPICIOUS" | "BENIGN";
+  entity_type: EntityType | string;
+  threat_level: ThreatLevel;
   group: number;
   tool_results?: string;
   // react-force-graph adds these at runtime
@@ -37,7 +54,7 @@ export interface ProcessedIntel {
   report_hash: string;
   case_file_id: string;
   filename: string;
-  threat_level: "CRITICAL" | "SUSPICIOUS" | "BENIGN";
+  threat_level: ThreatLevel;
   created_at: string;
 }
 
@@ -45,7 +62,7 @@ export interface CaseFile {
   id: string;
   filename: string;
   sha256_hash: string;
-  threat_level: "CRITICAL" | "SUSPICIOUS" | "BENIGN";
+  threat_level: ThreatLevel;
   created_at: string;
   node_count: number;
   link_count: number;
@@ -56,7 +73,7 @@ export interface CaseFileDetail {
   filename: string;
   content: string;
   sha256_hash: string;
-  threat_level: "CRITICAL" | "SUSPICIOUS" | "BENIGN";
+  threat_level: ThreatLevel;
   created_at: string;
   nodes: GraphNode[];
   links: GraphLink[];
@@ -68,8 +85,6 @@ export interface AgentLog {
   message: string;
   level: "INFO" | "SUCCESS" | "WARNING" | "ERROR";
 }
-
-export type ThreatLevel = "CRITICAL" | "SUSPICIOUS" | "BENIGN";
 
 export const THREAT_COLORS: Record<ThreatLevel, string> = {
   CRITICAL: "#ef4444",
@@ -85,13 +100,18 @@ export const THREAT_GLOW: Record<ThreatLevel, string> = {
 
 export const ENTITY_ICONS: Record<string, string> = {
   IP: "🌐",
+  CIDR: "🖧",
   EMAIL: "📧",
   DOMAIN: "🔗",
   ORG: "🏢",
   PERSON: "👤",
   GPE: "📍",
   CVE: "⚠️",
+  MITRE: "⚔️",
   HASH: "🔑",
+  WALLET: "💰",
+  FILE: "📁",
+  TEXT: "📝",
 };
 
 export interface ToolMeta {
@@ -99,12 +119,36 @@ export interface ToolMeta {
   display_name: string;
   category: string;
   speed: "fast" | "medium" | "slow";
+  timeout?: number;
   danger_level: "safe" | "caution" | "dangerous";
   description: string;
   entity_type: string[];
+  command?: string;
+  default_args?: string;
+  installed?: boolean;
+  path?: string;
+  is_custom?: boolean;
 }
 
 export interface ToolCategoriesResponse {
   categories: Record<string, ToolMeta[]>;
   total_tools: number;
+}
+
+export interface CorrelationItem {
+  label: string;
+  entity_type: string;
+  case_count: number;
+  associated_cases: {
+    id: string;
+    filename: string;
+    threat_level: ThreatLevel;
+  }[];
+}
+
+export interface AIChatMessage {
+  id: string;
+  role: "user" | "analyst" | "system";
+  content: string;
+  timestamp: string;
 }

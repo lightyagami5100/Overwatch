@@ -6,6 +6,7 @@ for JSON output. Falls back gracefully (returns []) when Ollama is
 unreachable or the response isn't valid JSON.
 """
 
+import os
 import json
 import logging
 import urllib.request
@@ -13,8 +14,14 @@ import urllib.error
 
 logger = logging.getLogger(__name__)
 
-OLLAMA_BASE = "http://127.0.0.1:11435"
-OLLAMA_GENERATE = f"{OLLAMA_BASE}/api/generate"
+# Candidate Ollama base URLs to probe
+DEFAULT_CANDIDATES = [
+    os.environ.get("OLLAMA_HOST", "").strip(),
+    "http://127.0.0.1:11435",
+    "http://127.0.0.1:11434",
+    "http://localhost:11435",
+    "http://localhost:11434",
+]
 
 # Prefer MiniMax for its strong reasoning; fall back to any available model.
 PREFERRED_MODELS = [
@@ -22,7 +29,38 @@ PREFERRED_MODELS = [
     "mistral:latest",
     "deepseek-r1:8b",
     "gemma3:1b",
+    "llama3:latest",
+    "qwen2.5:latest",
 ]
+
+
+def _get_active_ollama_base() -> tuple[str | None, str | None]:
+    """Find an active Ollama instance and its best available model."""
+    for base in DEFAULT_CANDIDATES:
+        if not base:
+            continue
+        if not base.startswith("http"):
+            base = f"http://{base}"
+        base = base.rstrip("/")
+
+        try:
+            req = urllib.request.Request(
+                f"{base}/api/tags",
+                headers={"Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=2) as resp:
+                data = json.loads(resp.read().decode())
+                available = {m["name"] for m in data.get("models", [])}
+                for preferred in PREFERRED_MODELS:
+                    if preferred in available:
+                        return base, preferred
+                # Fall back to whatever is first
+                if available:
+                    return base, next(iter(available))
+                return base, None
+        except Exception:
+            continue
+    return None, None
 
 EXTRACTION_PROMPT = """\
 You are a cybersecurity threat-intelligence analyst.
@@ -161,12 +199,12 @@ def extract_entities_with_llm(raw_text: str) -> list[dict]:
     Returns ``[]`` on any failure so the caller can fall back to
     regex / SpaCy extraction without interruption.
     """
-    model = _get_available_model()
-    if not model:
-        logger.info("No Ollama model available – skipping LLM extraction.")
+    base_url, model = _get_active_ollama_base()
+    if not base_url or not model:
+        logger.debug("No Ollama instance or model available – skipping LLM extraction.")
         return []
 
-    logger.info(f"Running LLM entity extraction with model '{model}' ...")
+    logger.info(f"Running LLM entity extraction via {base_url} with model '{model}' ...")
 
     try:
         prompt = EXTRACTION_PROMPT.format(text=raw_text[:4000])
@@ -184,7 +222,7 @@ def extract_entities_with_llm(raw_text: str) -> list[dict]:
         ).encode("utf-8")
 
         req = urllib.request.Request(
-            OLLAMA_GENERATE,
+            f"{base_url}/api/generate",
             data=payload,
             headers={"Content-Type": "application/json"},
             method="POST",

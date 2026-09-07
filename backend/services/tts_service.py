@@ -10,12 +10,9 @@ class TTSService:
         self.model = None
         self.voice_state = None
         self.is_ready = False
-        try:
-            import pocket_tts
-            self.pocket_tts = pocket_tts
-            logger.info("Pocket TTS module imported successfully.")
-        except ImportError:
-            logger.warning("Pocket TTS not installed yet.")
+        # Disabled temporarily to prevent CPU overhead and lag
+        self.pocket_tts = None
+        logger.info("Pocket TTS is currently disabled.")
 
     def _init_model(self):
         """Lazy load the TTS model and voice state on first request to avoid blocking startup."""

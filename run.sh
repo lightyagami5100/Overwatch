@@ -1,85 +1,96 @@
 #!/bin/bash
 # ============================================
-# Overwatch — Startup Script
-# Launches backend (FastAPI) and frontend (Next.js) concurrently
+# Overwatch Protocol (Flux v4.0) — Master Launcher
+# Launches Backend (FastAPI), Frontend (Next.js), Ollama AI Engine,
+# and Nova Chatbot (port 3001)
 # ============================================
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKEND_DIR="$SCRIPT_DIR/backend"
-FRONTEND_DIR="$SCRIPT_DIR/deeptrace"
+FRONTEND_DIR="$SCRIPT_DIR/overwatch"
+CHATBOT_DIR="${CHATBOT_DIR:-$SCRIPT_DIR/../chatbot-ollama}"
+if [ ! -d "$CHATBOT_DIR" ]; then
+    DETECTED_CHATBOT=$(find "$SCRIPT_DIR/.." -maxdepth 2 -type d -name "chatbot-ollama" 2>/dev/null | head -n 1)
+    if [ -n "$DETECTED_CHATBOT" ]; then
+        CHATBOT_DIR="$DETECTED_CHATBOT"
+    fi
+fi
 
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
+PURPLE='\033[0;35m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${CYAN}╔══════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║     DeepTrace AI — Command Center        ║${NC}"
-echo -e "${CYAN}║  Incident Command & Evidence Platform    ║${NC}"
-echo -e "${CYAN}╚══════════════════════════════════════════╝${NC}"
+echo -e "${CYAN}╔══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${CYAN}║           OVERWATCH PROTOCOL v4.0 (FLUX)                 ║${NC}"
+echo -e "${CYAN}║     All-in-One Cyber & OSINT Incident Command Station    ║${NC}"
+echo -e "${CYAN}╚══════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# --- Start Backend ---
-echo -e "${YELLOW}[1/2]${NC} Starting FastAPI backend on port 8000..."
+# --- 1. Start Backend ---
+echo -e "${YELLOW}[1/4]${NC} Launching FastAPI backend engine on port 8000..."
 cd "$BACKEND_DIR"
 
 if [ ! -d ".venv" ]; then
-    echo -e "${RED}Error: Virtual environment not found. Run:${NC}"
-    echo "  cd backend && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
-    exit 1
+    echo -e "${RED}Error: Virtual environment not found. Creating one...${NC}"
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+else
+    source .venv/bin/activate
 fi
 
-source .venv/bin/activate
-uvicorn main:app --reload --host 0.0.0.0 --port 8000 &
+uvicorn main:app --reload --host 0.0.0.0 --port 8000 > /dev/null 2>&1 &
 BACKEND_PID=$!
-echo -e "${GREEN}✓ Backend started (PID: $BACKEND_PID)${NC}"
+echo -e "${GREEN}✓ Backend started (PID: $BACKEND_PID) -> http://localhost:8000${NC}"
 
-# --- Start Frontend ---
-echo -e "${YELLOW}[2/4]${NC} Starting Frontend on port 3000..."
-FRONTEND_DIR="/home/yagami/Desktop/Flux/overwatch"
+# --- 2. Start Frontend ---
+echo -e "${YELLOW}[2/4]${NC} Launching Next.js 16 WebGL Command Station on port 3000..."
 cd "$FRONTEND_DIR"
-npm run dev &
+npm run dev > /dev/null 2>&1 &
 FRONTEND_PID=$!
-echo -e "${GREEN}✓ Frontend started (PID: $FRONTEND_PID)${NC}"
+echo -e "${GREEN}✓ Frontend started (PID: $FRONTEND_PID) -> http://localhost:3000${NC}"
 
-# --- Start Ollama ---
-echo -e "${YELLOW}[3/4]${NC} Starting Local AI Backend (Ollama) on port 11435..."
-OLLAMA_HOST=127.0.0.1:11435 ollama serve &
-OLLAMA_PID=$!
-echo -e "${YELLOW}Waiting for Ollama to initialize...${NC}"
-sleep 3
-echo -e "${GREEN}✓ Ollama started (PID: $OLLAMA_PID)${NC}"
-
-# --- Start Chatbot ---
-echo -e "${YELLOW}[4/4]${NC} Starting AI Chatbot on port 3001..."
-CHATBOT_DIR="/home/yagami/Desktop/Nova - Gilani/chatbot-ollama"
-cd "$CHATBOT_DIR"
-if [ -d "node_modules" ]; then
-    PORT=3001 npm start &
-    CHATBOT_PID=$!
-    echo -e "${GREEN}✓ Chatbot started (PID: $CHATBOT_PID)${NC}"
+# --- 3. Start Ollama Local LLM (if installed) ---
+if command -v ollama &> /dev/null; then
+    echo -e "${YELLOW}[3/4]${NC} Starting Ollama Zero-Trust AI Engine on port 11435..."
+    OLLAMA_HOST=127.0.0.1:11435 ollama serve > /dev/null 2>&1 &
+    OLLAMA_PID=$!
+    echo -e "${GREEN}✓ Ollama service running (PID: $OLLAMA_PID)${NC}"
 else
-    echo -e "${RED}Warning: Chatbot not installed properly. Skipping...${NC}"
+    echo -e "${YELLOW}[3/4]${NC} Ollama binary not found globally. Backend fallback synthesis active."
+    OLLAMA_PID=""
+fi
+
+# --- 4. Start Nova Chatbot on port 3001 ---
+if [ -d "$CHATBOT_DIR" ]; then
+    echo -e "${YELLOW}[4/4]${NC} Launching Nova AI Chatbot on port 3001..."
+    cd "$CHATBOT_DIR"
+    npx next dev -p 3001 > /dev/null 2>&1 &
+    CHATBOT_PID=$!
+    echo -e "${GREEN}✓ Nova Chatbot running (PID: $CHATBOT_PID) -> http://localhost:3001${NC}"
+else
     CHATBOT_PID=""
 fi
 
 echo ""
-echo -e "${GREEN}═══════════════════════════════════════════${NC}"
-echo -e "${GREEN} DeepTrace AI & Nova Chatbot running!${NC}"
-echo -e "${CYAN} Frontend: ${NC}http://localhost:3000"
-echo -e "${CYAN} Chatbot:  ${NC}http://localhost:3001"
-echo -e "${CYAN} Backend:  ${NC}http://localhost:8000"
-echo -e "${CYAN} API Docs: ${NC}http://localhost:8000/docs"
-echo -e "${GREEN}═══════════════════════════════════════════${NC}"
+echo -e "${PURPLE}══════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}  OVERWATCH PROTOCOL IS ACTIVE AND READY FOR ENGAGEMENT${NC}"
+echo -e "${CYAN}  * Dashboard:     ${NC}http://localhost:3000"
+echo -e "${CYAN}  * Nova AI:       ${NC}http://localhost:3001"
+echo -e "${CYAN}  * API Backend:   ${NC}http://localhost:8000"
+echo -e "${CYAN}  * API Swagger:   ${NC}http://localhost:8000/docs"
+echo -e "${CYAN}  * Tool Catalog:  ${NC}1,000+ Tools Indexed (Omni-Tool Hub)"
+echo -e "${PURPLE}══════════════════════════════════════════════════════════${NC}"
 echo ""
-echo -e "${YELLOW}Press Ctrl+C to stop all services${NC}"
+echo -e "${YELLOW}Press Ctrl+C to terminate all services${NC}"
 
-# Trap Ctrl+C to kill all processes
-trap "echo -e '\n${RED}Shutting down systems...${NC}'; kill $BACKEND_PID $FRONTEND_PID $OLLAMA_PID $CHATBOT_PID 2>/dev/null; exit 0" SIGINT SIGTERM
+# Trap Ctrl+C to clean shutdown
+trap "echo -e '\n${RED}Terminating Overwatch services...${NC}'; kill $BACKEND_PID $FRONTEND_PID $OLLAMA_PID $CHATBOT_PID 2>/dev/null; exit 0" SIGINT SIGTERM
 
-# Wait for either process to exit
 wait

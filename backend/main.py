@@ -1,12 +1,9 @@
 """
-DeepTrace AI — FastAPI application entry point.
-
-Configures CORS, registers routes, and initializes the database
-(including seed data) on startup.
+Overwatch Protocol (Flux) — FastAPI Application Entry Point.
+Configures CORS, registers routes, and initializes the database.
 """
 
 from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,16 +21,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Overwatch Backend",
-    description="OSINT and Threat Intel Aggregation API",
-    version="1.0.0",
+    title="Overwatch Protocol Backend",
+    description="Decentralized Cyber Command, OSINT Aggregation & Threat Intelligence API",
+    version="2.0.0",
     lifespan=lifespan,
 )
 
-# CORS — allow Next.js frontend
+# CORS — allow all local origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,4 +45,4 @@ app.include_router(tools_router)
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
-    return {"status": "operational", "service": "DeepTrace AI Backend"}
+    return {"status": "operational", "service": "Overwatch Protocol v2.0"}

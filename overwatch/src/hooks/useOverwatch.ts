@@ -1,12 +1,18 @@
 /**
- * Central state management hook for the DeepTrace dashboard.
- * Manages graph data, terminal logs, vault files, and entity inspection.
+ * Central state management hook for the DeepTrace / Overwatch dashboard.
+ * Manages graph data, terminal logs, vault files, entity inspection, and connection state.
  */
 
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { processIntel, getCaseFiles, getCaseFile, deleteCaseFile } from "@/lib/api";
+import { useCallback, useEffect, useState, useRef } from "react";
+import {
+  processIntel,
+  getCaseFiles,
+  getCaseFile,
+  deleteCaseFile,
+  checkBackendHealth,
+} from "@/lib/api";
 import { speakSummary } from "@/lib/speech";
 import type {
   AgentLog,
@@ -29,24 +35,44 @@ export function useOverwatch() {
   const [caseFiles, setCaseFiles] = useState<CaseFile[]>([]);
   const [activeCaseId, setActiveCaseId] = useState<string | null>(null);
 
-  // Error state
+  // Error & Connectivity state
   const [error, setError] = useState<string | null>(null);
+  const [isBackendConnected, setIsBackendConnected] = useState<boolean>(true);
+  const prevConnectedRef = useRef<boolean>(true);
 
   /**
-   * Load case files from the vault on mount.
+   * Load case files from the vault.
    */
   const loadCaseFiles = useCallback(async () => {
     try {
       const files = await getCaseFiles();
       setCaseFiles(files);
-    } catch (err) {
-      console.error("Failed to load case files:", err);
+    } catch (err: any) {
+      console.warn("[Overwatch] Note: Could not load case files:", err?.message || err);
     }
   }, []);
 
+  /**
+   * Initial load & health monitor to auto-reconnect when backend comes online.
+   */
   useEffect(() => {
     loadCaseFiles();
-  }, [loadCaseFiles]);
+
+    const checkHealth = async () => {
+      const health = await checkBackendHealth();
+      setIsBackendConnected(health.online);
+
+      // If transition from offline to online, reload vault data
+      if (health.online && !prevConnectedRef.current) {
+        loadCaseFiles();
+      }
+      prevConnectedRef.current = health.online;
+    };
+
+    checkHealth();
+    const interval = setInterval(checkHealth, isBackendConnected ? 15000 : 4000);
+    return () => clearInterval(interval);
+  }, [loadCaseFiles, isBackendConnected]);
 
   /**
    * Submit raw intelligence text for processing.
@@ -110,8 +136,8 @@ export function useOverwatch() {
       
       // Speak summary when loading from vault
       speakSummary(detail.threat_level, detail.nodes.length, detail.links.length);
-    } catch (err) {
-      console.error("Failed to load case graph:", err);
+    } catch (err: any) {
+      console.warn("[Overwatch] Could not load case graph:", err?.message || err);
     }
   }, []);
 
@@ -126,8 +152,8 @@ export function useOverwatch() {
         setActiveCaseId(null);
       }
       await loadCaseFiles();
-    } catch (err) {
-      console.error("Failed to delete case file:", err);
+    } catch (err: any) {
+      console.warn("[Overwatch] Could not delete case file:", err?.message || err);
     }
   }, [activeCaseId, loadCaseFiles]);
 
@@ -147,6 +173,7 @@ export function useOverwatch() {
     caseFiles,
     activeCaseId,
     error,
+    isBackendConnected,
     loadCaseFiles,
 
     // Actions
@@ -156,3 +183,4 @@ export function useOverwatch() {
     removeCaseFile,
   };
 }
+
